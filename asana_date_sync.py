@@ -4,7 +4,7 @@ from datetime import datetime
 
 # --- Configuration ---
 ASANA_PAT = os.getenv('ASANA_PAT')
-PROJECT_GID = os.getenv('ASANA_PROJECT_GID')
+PROJECT_GID = os.getenv('PROJECT_GID')
 
 # --- Pre-flight Check ---
 if not all([ASANA_PAT, PROJECT_GID]):
@@ -20,7 +20,6 @@ TASKS_URL = f"https://app.asana.com/api/1.0/projects/{PROJECT_GID}/tasks"
 DATE_FORMAT = "%Y-%m-%d"
 
 # --- Helper Functions ---
-
 def get_subtasks(parent_task_gid):
     """Fetches all subtasks for a given parent task."""
     subtask_url = f"https://app.asana.com/api/1.0/tasks/{parent_task_gid}/subtasks"
@@ -48,7 +47,6 @@ def update_parent_task_dates(task_gid, start_date, due_date):
     print(f"  - Synced dates for parent GID {task_gid} to Start: {payload_data.get('start_on')}, Due: {payload_data.get('due_on')}.")
 
 # --- Main Logic ---
-
 def main():
     """Fetches parent tasks and syncs their dates based on their subtasks."""
     print("Starting Asana parent task date sync...")
@@ -75,21 +73,16 @@ def main():
                 
                 earliest_start, latest_due = None, None
                 
-                # Loop through all subtasks to find the overall date range
                 for subtask in subtasks:
                     start_str, due_str = subtask.get('start_on'), subtask.get('due_on')
                     
-                    # --- Logic to find the earliest start date ---
                     if start_str:
                         current_start = datetime.strptime(start_str, DATE_FORMAT).date()
-                        # If this is the first start date we've found, or if it's earlier than the current earliest, update it.
                         if earliest_start is None or current_start < earliest_start:
                             earliest_start = current_start
                             
-                    # --- Logic to find the latest due date ---
                     if due_str:
                         current_due = datetime.strptime(due_str, DATE_FORMAT).date()
-                        # If this is the first due date we've found, or if it's later than the current latest, update it.
                         if latest_due is None or current_due > latest_due:
                             latest_due = current_due
                 
@@ -98,8 +91,6 @@ def main():
                 parent_start = datetime.strptime(parent_start_str, DATE_FORMAT).date() if parent_start_str else None
                 parent_due = datetime.strptime(parent_due_str, DATE_FORMAT).date() if parent_due_str else None
                 
-                # --- Logic to check if an update is needed ---
-                # This prevents unnecessary API calls if the parent task dates already match.
                 update_needed = False
                 if (earliest_start and earliest_start != parent_start) or \
                    (latest_due and latest_due != parent_due):
@@ -117,4 +108,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
