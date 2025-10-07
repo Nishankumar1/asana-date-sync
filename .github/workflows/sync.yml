@@ -28,4 +28,6 @@ jobs:
         env:
           ASANA_PAT: ${{ secrets.ASANA_PAT }}
           PROJECT_GID: ${{ secrets.PROJECT_GID }}
-        run: python asana_date_sync.py
+        # This is the only line that changes.
+        # We are running the debug script instead of the main script.
+        run: python debug_secrets.py
