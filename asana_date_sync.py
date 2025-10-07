@@ -23,8 +23,7 @@ DATE_FORMAT = "%Y-%m-%d"
 def get_subtasks(parent_task_gid):
     """Fetches all subtasks for a given parent task."""
     subtask_url = f"https://app.asana.com/api/1.0/tasks/{parent_task_gid}/subtasks"
-    params = {"opt_fields": "name,start_on,due_on"}
-    response = requests.get(subtask_url, headers=HEADERS, params=params)
+    response = requests.get(subtask_url, headers=HEADERS, params=all)
     response.raise_for_status()
     print(response.json()['data'])
     return response.json()['data']
