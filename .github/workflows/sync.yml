@@ -3,7 +3,7 @@ name: Asana Parent Task Date Sync
 on:
   # Trigger 1: Runs on a schedule
   schedule:
-    - cron: "*/5 * * * *" # Runs every 5 minutes
+    - cron: "35 5 * * *" # Runs every 5 minutes
 
   # Trigger 2: Allows you to run it manually from the Actions tab
   workflow_dispatch:
