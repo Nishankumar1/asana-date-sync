@@ -26,6 +26,7 @@ def get_subtasks(parent_task_gid):
     params = {"opt_fields": "name,start_on,due_on"}
     response = requests.get(subtask_url, headers=HEADERS, params=params)
     response.raise_for_status()
+    print(response.json()['data'])
     return response.json()['data']
 
 def update_parent_task_dates(task_gid, start_date, due_date):
