@@ -27,5 +27,16 @@ jobs:
       - name: Run date sync script
         env:
           ASANA_PAT: ${{ secrets.ASANA_PAT }}
-          PROJECT_GID: ${{ secrets.ASANA_PROJECT_GID }}
-        run: python asana_date_sync.py
+          PROJECT_GID: ${{ secrets.PROJECT_GID }}
+        run: |
+          echo "Checking environment variables..."
+          if [ -z "$ASANA_PAT" ]; then
+            echo "Error from workflow: ASANA_PAT environment variable is not set."
+            exit 1
+          fi
+          if [ -z "$PROJECT_GID" ]; then
+            echo "Error from workflow: PROJECT_GID environment variable is not set."
+            exit 1
+          fi
+          echo "Environment variables appear to be set. Running Python script."
+          python asana_date_sync.py
